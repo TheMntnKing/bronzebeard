@@ -1,0 +1,58 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/layouts/Main.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { SITE } from "@/config";
+---
+
+<Layout title={`Projects | ${SITE.title}`}>
+  <Header />
+  <Main
+    pageTitle="Projects"
+    pageDesc="A selection of my work, from production-grade systems to security tools."
+  >
+    <section class="space-y-12">
+      <article class="space-y-3">
+        <p class="text-xs uppercase tracking-[0.32em] text-foreground/60">Retrieval systems</p>
+        <h2 class="text-xl font-semibold sm:text-2xl">Production-Ready RAG @ 1M+ Vectors</h2>
+        <p class="text-sm text-foreground/70">
+          Blueprint for a resilient retrieval pipeline that combines bulk ingestion
+          windows, streaming updates, and adversarial probes for poisoning
+          detection—all tuned for sub-200ms latency.
+        </p>
+        <p class="text-xs uppercase tracking-[0.28em] text-foreground/60">
+          Stack: Python · Docker · Kubernetes · VectorDB
+        </p>
+        <div class="flex flex-wrap gap-4 text-sm">
+          <LinkButton href="https://github.com/bronzebeard-dev/production-rag" class="underline">
+            GitHub Repo
+          </LinkButton>
+          <LinkButton href="/posts/forge-log-001" class="underline">
+            Read the Write-up
+          </LinkButton>
+        </div>
+      </article>
+
+      <article class="space-y-3">
+        <p class="text-xs uppercase tracking-[0.32em] text-foreground/60">Offensive research</p>
+        <h2 class="text-xl font-semibold sm:text-2xl">Adversarial Attack Library</h2>
+        <p class="text-sm text-foreground/70">
+          Operator-focused tooling for staging prompt-injection, jailbreaking, and
+          model manipulation scenarios. Ships with automated replay scripts and
+          guardrail benchmarks.
+        </p>
+        <p class="text-xs uppercase tracking-[0.28em] text-foreground/60">
+          Stack: Python · LangChain · Transformers
+        </p>
+        <div class="flex flex-wrap gap-4 text-sm">
+          <LinkButton href="https://github.com/bronzebeard-dev/adversarial-attack-library" class="underline">
+            GitHub Repo
+          </LinkButton>
+        </div>
+      </article>
+    </section>
+  </Main>
+  <Footer />
+</Layout>

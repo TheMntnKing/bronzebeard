@@ -1,0 +1,46 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/layouts/Main.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { SITE } from "@/config";
+---
+
+<Layout title={`About | ${SITE.title}`}>
+  <Header />
+  <Main pageTitle="About" pageDesc={undefined}>
+    <section class="space-y-10 text-base text-foreground/75">
+      <article class="space-y-3">
+        <h2 class="text-xs uppercase tracking-[0.3em] text-foreground/55">About Me</h2>
+        <p class="leading-relaxed">
+          I'm Azamat, the AI Engineer behind Bronzebeard. This site is my digital forge, where I publish technical blueprints, security breakdowns, and practical playbooks for building resilient AI.
+
+        </p>
+        <p class="leading-relaxed">
+          My work is built on a simple idea: you can't create a truly resilient system until you understand how to break it. This site serves as my public notebook for that process, capturing a mix of hands-on projects, deep dives, and what I figure out as I go.
+        </p>
+      </article>
+
+      <article class="space-y-3">
+        <h2 class="text-xs uppercase tracking-[0.3em] text-foreground/55">Connect</h2>
+        <p>
+          I'm always open to connecting with other engineers and researchers. For professional
+          inquiries, you can find me here:
+        </p>
+        <div class="flex flex-wrap gap-4 text-sm text-foreground/80">
+          <LinkButton href="https://www.linkedin.com/in/the-mountain-king/" class="underline">
+            LinkedIn
+          </LinkButton>
+          <LinkButton href="https://github.com/bronzebeard-dev" class="underline">
+            GitHub
+          </LinkButton>
+          <LinkButton href="mailto:forge@bronzebeard.dev" class="underline">
+            Email
+          </LinkButton>
+        </div>
+      </article>
+    </section>
+  </Main>
+  <Footer />
+</Layout>

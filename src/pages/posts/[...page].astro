@@ -16,14 +16,59 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
+
+const postsByYear = page.data.reduce((map, post) => {
+  const year = new Date(post.data.pubDatetime).getFullYear();
+  const existing = map.get(year) ?? [];
+  existing.push(post);
+  map.set(year, existing);
+  return map;
+}, new Map<number, typeof page.data>());
+
+const sortedYears = Array.from(postsByYear.keys()).sort((a, b) => b - a);
+
+const tags = Array.from(
+  new Set(
+    page.data.flatMap(entry => entry.data.tags ?? [])
+  )
+).sort((a, b) => a.localeCompare(b));
 ---
 
 <Layout title={`Posts | ${SITE.title}`}>
   <Header />
-  <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
-    <ul>
-      {page.data.map(data => <Card {...data} />)}
-    </ul>
+  <Main
+    pageTitle="Posts"
+    
+    pageDesc="A collection of deep dives, tutorials, and blueprints on AI engineering and security."
+  >
+    {
+      tags.length > 0 && (
+        <div class="flex flex-wrap gap-3 text-sm text-foreground/70">
+          {tags.map(tag => (
+            <a
+              href={`/search/?q=${encodeURIComponent(tag)}`}
+              class="rounded-full border border-border/70 px-4 py-1.5 font-medium transition hover:border-accent hover:text-accent"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )
+    }
+    <p class="mt-4 text-sm text-foreground/60">
+      Need something specific? Try the <a class="underline" href="/search">search</a> bar.
+    </p>
+
+    <div class="mt-8 space-y-9">
+      {sortedYears.map(year => (
+        <section class="space-y-3">
+          <h2 class="text-lg font-semibold">{year}</h2>
+          <ul class="space-y-6">
+            {postsByYear.get(year)?.map(data => <Card variant="h3" {...data} />)}
+          </ul>
+        </section>
+      ))}
+    </div>
   </Main>
 
   <Pagination {page} />

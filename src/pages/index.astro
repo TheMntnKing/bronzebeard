@@ -3,109 +3,120 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import Card from "@/components/Card.astro";
-import Hr from "@/components/Hr.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
 
 const posts = await getCollection("blog");
 
 const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const latestPosts = sortedPosts.slice(0, SITE.postPerIndex);
 ---
 
 <Layout>
   <Header />
-  <main id="main-content" data-layout="index">
-    <section id="hero" class="pt-8 pb-6">
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Mingalaba
-      </h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="inline-block"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <IconRss
-          width={20}
-          height={20}
-          class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
+  <main id="main-content" data-layout="index" class="space-y-14 pb-20">
+    <section id="hero" class="pt-12">
+      <p class="text-xs uppercase tracking-[0.4em] text-foreground/60">The Mountain King</p>
+      <p class="mt-6 max-w-2xl text-xl leading-relaxed text-foreground/85">
+        I build and break AI systems.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4 text-sm">
+        <LinkButton href="/posts" class="underline underline-offset-4">
+          Start reading
+        </LinkButton>
+        <LinkButton href="/projects" class="underline underline-offset-4">
+          See current builds
+        </LinkButton>
+      </div>
+    </section>
 
-      <p>
-        AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro
-        blog theme. This theme follows best practices and provides accessibility
-        out of the box. Light and dark mode are supported by default. Moreover,
-        additional color schemes can also be configured.
-      </p>
-      <p class="mt-2">
-        Read the blog posts or check
+    <section id="latest" class="space-y-6">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
+        <div>
+          <h2 class="text-2xl font-semibold">Latest from the forge</h2>
+          
+        </div>
         <LinkButton
-          class="underline decoration-dashed underline-offset-4 hover:text-accent"
-          href="https://github.com/satnaing/astro-paper#readme"
+          href="/posts/"
+          class="text-xs uppercase tracking-[0.28em] text-foreground/70 hover:text-accent"
         >
-          README
-        </LinkButton> for more info.
-      </p>
+          View all
+          <IconArrowRight class="ms-1 inline-block size-4 rtl:-rotate-180" />
+        </LinkButton>
+      </div>
       {
-        // only display if at least one social link is enabled
-        SOCIALS.length > 0 && (
-          <div class="mt-4 flex flex-col sm:flex-row sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">Social Links:</div>
-            <Socials />
-          </div>
+        latestPosts.length === 0 ? (
+          <p class="text-sm text-foreground/60">No posts yet. Check back soon.</p>
+        ) : (
+          <ul class="space-y-6">
+            {latestPosts.map(data => (
+              <Card variant="h3" {...data} />
+            ))}
+          </ul>
         )
       }
     </section>
 
-    <Hr />
+    <section id="projects" class="space-y-6">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
+        <div>
+          <h2 class="text-2xl font-semibold">Recent Projects</h2>
+        </div>
+        <LinkButton
+          href="/projects"
+          class="text-xs uppercase tracking-[0.28em] text-foreground/70 hover:text-accent"
+        >
+          All projects
+          <IconArrowRight class="ms-1 inline-block size-4 rtl:-rotate-180" />
+        </LinkButton>
+      </div>
+      <div class="space-y-5 text-sm text-foreground/70">
+        <article class="space-y-2">
+          <p class="text-xs uppercase tracking-[0.28em] text-foreground/60">Retrieval systems</p>
+          <div class="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
+            <div>
+              <h3 class="text-lg font-medium text-foreground">Production-Ready RAG @ 1M+ Vectors</h3>
+              <p class="text-foreground/60">
+                Secure retrieval pipeline with observability baked in, tuned for low-latency
+                inference and aggressive poisoning detection.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-3 text-xs">
+              <LinkButton href="/projects" class="underline underline-offset-4">
+                Project notes
+              </LinkButton>
+              <LinkButton href="https://github.com/bronzebeard-dev/production-rag" class="underline underline-offset-4">
+                GitHub
+              </LinkButton>
+            </div>
+          </div>
+        </article>
 
-    {
-      featuredPosts.length > 0 && (
-        <>
-          <section id="featured" class="pt-12 pb-6">
-            <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
-            <ul>
-              {featuredPosts.map(data => (
-                <Card variant="h3" {...data} />
-              ))}
-            </ul>
-          </section>
-          {recentPosts.length > 0 && <Hr />}
-        </>
-      )
-    }
-
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
-            )}
-          </ul>
-        </section>
-      )
-    }
-
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        All Posts
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
+        <article class="space-y-2">
+          <p class="text-xs uppercase tracking-[0.28em] text-foreground/60">Offensive research</p>
+          <div class="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
+            <div>
+              <h3 class="text-lg font-medium text-foreground">Adversarial Attack Library</h3>
+              <p class="text-foreground/60">
+                Operator-friendly kits for pressure-testing LLM agents with automated reports
+                and guardrail benchmarks.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-3 text-xs">
+              <LinkButton href="/projects" class="underline underline-offset-4">
+                Project notes
+              </LinkButton>
+              <LinkButton href="https://github.com/bronzebeard-dev/adversarial-attack-library" class="underline underline-offset-4">
+                GitHub
+              </LinkButton>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
   </main>
   <Footer />
 </Layout>
