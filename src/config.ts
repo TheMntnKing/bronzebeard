@@ -1,6 +1,6 @@
 export const SITE = {
   website: "https://bronzebeard.dev/", // replace this with your deployed domain
-  author: "The Mountain King",
+  author: "Yelmagambetov Azamat",
   profile: "https://github.com/bronzebeard-dev",
   desc: "I build and break AI systems.",
   title: "Bronzebeard",
